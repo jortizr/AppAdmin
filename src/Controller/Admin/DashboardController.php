@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Post;
 use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 
@@ -36,6 +37,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Categorias', 'fa fa-folder', Category::class);
         yield MenuItem::linkToCrud('Publicaciones', 'fa fa-cloud', Post::class);
         yield MenuItem::linkToCrud('Comentarios', 'fa-regular fa-comment', Comment::class);
+        yield MenuItem::linkToCrud('Usuarios', 'fa fa-users', User::class);
+
         yield MenuItem::linkToRoute('Sitio Web', 'fas fa-home', 'app_home');
     }
 }
