@@ -10,6 +10,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -23,7 +27,7 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Usuario')
             ->setEntityLabelInPlural('Usuarios')
-            ->setSearchFields(['email'])
+            ->setSearchFields(['name','email'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 
@@ -32,11 +36,17 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
+            TextField::new('name', 'Nombre'),
             EmailField::new('email'),
             ChoiceField::new('roles')->setChoices([
                 'Administrador' => 'ROLE_ADMIN',
                 'Usuario' => 'ROLE_USER',
             ])->allowMultipleChoices(),
         ];
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return parent::configureActions($actions)->disable(Action::NEW);
     }
 }

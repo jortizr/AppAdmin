@@ -2,29 +2,31 @@
 
 namespace App\Factory;
 
-use App\Entity\Comment;
-use App\Repository\CommentRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /**
- * @extends PersistentProxyObjectFactory<Comment>
+ * @extends PersistentProxyObjectFactory<User>
  */
-final class CommentFactory extends PersistentProxyObjectFactory{
+final class UserFactory extends PersistentProxyObjectFactory{
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
+    private $hasher;
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
+        $this->hasher = $hasher;
     }
 
     public static function class(): string
     {
-        return Comment::class;
+        return User::class;
     }
 
     /**
@@ -35,8 +37,10 @@ final class CommentFactory extends PersistentProxyObjectFactory{
     protected function defaults(): array|callable
     {
         return [
-            'content' => self::faker()->text(),
-            'user' => UserFactory::random(),
+            'email' => self::faker()->email(),
+            'name' => self::faker()->name(),
+            'password' => '123456789',
+            'roles' => ['ROLE_USER'],
         ];
     }
 
@@ -46,7 +50,9 @@ final class CommentFactory extends PersistentProxyObjectFactory{
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Comment $comment): void {})
-        ;
+            ->afterInstantiate(function(User $user): void {
+                $user->setPassword(
+                    $this->hasher->hashPassword($user, $user->getPassword()));
+            });
     }
 }
