@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PageController!{% endblock %}
+
+{% block body %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>
+        <strong>{{ post.category.name }}</strong>
+        - {{ post.comments|length }} Comentarios
+    </p>
+    <hr>
+
+    <div>
+        {% for comment in post.comments %}
+            <p>{{ comment.content }}</p>
+            <hr>
+        {% endfor %}
+    
+    </div>
+
+    <a href="{{ path('app_home') }}">Volver</a>
+{% endblock %}
