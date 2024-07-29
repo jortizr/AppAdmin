@@ -10,6 +10,9 @@
         - {{ post.comments|length }} Comentarios
     </p>
     <hr>
+    <div>
+        {% include('page/_comment-form.html.twig') %}
+    </div>
 
     <div>
         {% for comment in post.comments %}
