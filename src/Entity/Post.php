@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -23,11 +22,10 @@ class Post
     private ?string $title = null;
 
     #[ORM\Column(length: 255, unique: true)]
-
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
- 
+
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
@@ -38,6 +36,7 @@ class Post
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
@@ -48,7 +47,6 @@ class Post
     {
         $this->comments = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -149,5 +147,4 @@ class Post
 
         return $this;
     }
-
 }

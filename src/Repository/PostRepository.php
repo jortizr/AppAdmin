@@ -24,9 +24,4 @@ class PostRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    public function findOneBySlug(string $slug): ?Post
-    {
-        return $this->findOneBy(['slug' => $slug]);
-    }
 }
