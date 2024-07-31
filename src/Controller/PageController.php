@@ -44,6 +44,7 @@ class PageController extends AbstractController
         
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);//manejamos los datos
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($comment);
@@ -52,6 +53,7 @@ class PageController extends AbstractController
             return $this->redirectToRoute('app_post', 
                     ['slug' => $post->getSlug()]);
         }
+        dd($post);
         return $this->render('page/post.html.twig', [
             'post' => $post,
             'form' => $form->createView(),

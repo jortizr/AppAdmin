@@ -16,11 +16,13 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findLatest(int $limit = 15): array
+    public function findLatest(): array
     {
         return $this->createQueryBuilder('post')
+            ->addSelect('comments', 'category')
+            ->leftJoin('post.comments', 'comments')
+            ->leftJoin('post.category', 'category')
             ->orderBy('post.id', 'DESC')
-            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
